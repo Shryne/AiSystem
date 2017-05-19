@@ -12,7 +12,7 @@ import utils.Stopwatch
  * @param
  * @return
  */
-class AvgMovesPerSecond : Information<Unit> {
+class AvgMovesPerSecond : Information<Any> {
     companion object {
         private val SECOND = 1000L
         private val MAX_AMOUNT_FOR_AVG = 20
@@ -24,9 +24,9 @@ class AvgMovesPerSecond : Information<Unit> {
     private val timer = Stopwatch()
 
     override val name = "Avg moves per second"
-    override val value = avgMovesPerSecond.format()
+    override val value get() = avgMovesPerSecond.format()
 
-    override fun update(event: Event, basedOn: Unit) {
+    override fun update(event: Event, basedOn: Any) {
         when (event) {
             Event.POST_MOVE ->
                 if (timer.isTimeOver(SECOND)) {

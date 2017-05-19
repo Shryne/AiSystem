@@ -35,5 +35,5 @@ class InformedGame2048(val game: Game2048) : Game2048 by game, Informed<Game2048
         info.removeAt(index)
     }
 
-    override fun toString() = "$game\n$info"
+    override fun toString() = "$game\nGameInfo:$info"
 }

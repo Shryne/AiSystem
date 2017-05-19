@@ -11,15 +11,15 @@ import logic.information.format
  * @param
  * @return
  */
-class AvgMovesTillEnd : Information<Unit> {
+class AvgMovesTillEnd : Information<Any> {
     private var avgMoves = 0.0
     private var gamesPlayed = 0
     private var moveCounter = 0
 
     override val name = "Average moves till end"
-    override val value = avgMoves.format()
+    override val value get()  = avgMoves.format()
 
-    override fun update(event: Event, basedOn: Unit) =
+    override fun update(event: Event, basedOn: Any) =
             when (event) {
                 Event.POST_MOVE -> moveCounter += 1
                 Event.POST_GAME -> {

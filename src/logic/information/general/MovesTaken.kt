@@ -11,13 +11,13 @@ import logic.information.format
  * @param
  * @return
  */
-class MovesTaken : Information<Unit> {
+class MovesTaken : Information<Any> {
     private var movesTaken = 0
 
     override val name = "Moves taken"
-    override val value = movesTaken.format()
+    override val value get() = movesTaken.format()
 
-    override fun update(event: Event, basedOn: Unit) =
+    override fun update(event: Event, basedOn: Any) =
             when (event) {
                 Event.POST_MOVE -> movesTaken += 1
                 else            -> Unit

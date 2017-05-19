@@ -17,7 +17,7 @@ class HighestTileReached : Information<Game2048> {
     private var amount = 0
 
     override val name = "Highest tile reached"
-    override val value = amount.format()
+    override val value get() = amount.format()
     val typedValue get() = amount
 
     override fun update(event: Event, basedOn: Game2048) =
@@ -27,8 +27,10 @@ class HighestTileReached : Information<Game2048> {
                     if (currentHighestTile > highestTile) {
                         highestTile = currentHighestTile
                         amount = 1
-                    } else {
+                    } else if (currentHighestTile == highestTile) {
                         amount += 1
+                    } else {
+                        Unit
                     }
                 }
                 else            -> Unit

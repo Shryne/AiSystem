@@ -6,7 +6,7 @@ package logic.information
  * @param
  * @return
  */
-interface Informed<T> {
+interface Informed<out T> {
     fun addAll(vararg information: Information<T>)
     fun remove(index: Int)
 }

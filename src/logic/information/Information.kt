@@ -6,7 +6,7 @@ package logic.information
  * @param
  * @return
  */
-interface Information<T> {
+interface Information<in T> {
     val name: String
     val value: String
 

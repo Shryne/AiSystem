@@ -12,7 +12,7 @@ import logic.information.percentage
  * @param
  * @return
  */
-class HighestTilePercentage(val highestTileReached: HighestTileReached) : Information<Game2048> {
+class HighestTileProbability(val highestTileReached: HighestTileReached) : Information<Game2048> {
     private var gamesPlayed = 0
 
     override val name = "Highest tile probability"

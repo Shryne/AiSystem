@@ -12,7 +12,7 @@ import utils.Stopwatch
  * @param
  * @return
  */
-class MovesPerSecond : Information<Unit> {
+class MovesPerSecond : Information<Any> {
     companion object {
         private val SECOND = 1000L
     }
@@ -22,9 +22,9 @@ class MovesPerSecond : Information<Unit> {
     private val timer = Stopwatch()
 
     override val name = "Moves per second"
-    override val value = movesPerSecond.format()
+    override val value get() = movesPerSecond.format()
 
-    override fun update(event: Event, basedOn: Unit) {
+    override fun update(event: Event, basedOn: Any) {
         when (event) {
             Event.POST_MOVE ->
                 if (timer.isTimeOver(SECOND)) {

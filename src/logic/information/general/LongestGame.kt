@@ -11,14 +11,14 @@ import logic.information.format
  * @param
  * @return
  */
-class LongestGame : Information<Unit> {
+class LongestGame : Information<Any> {
     private var mostMoves = 0
     private var currentMoves = 0
 
     override val name = "Longest game"
-    override val value = mostMoves.format()
+    override val value get() = mostMoves.format()
 
-    override fun update(event: Event, basedOn: Unit) =
+    override fun update(event: Event, basedOn: Any) =
             when (event) {
                 Event.POST_MOVE -> currentMoves += 1
                 Event.POST_GAME -> {

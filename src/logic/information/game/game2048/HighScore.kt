@@ -16,7 +16,7 @@ class HighScore : Information<Game2048> {
     private var highScore = 0
 
     override val name = "High score"
-    override val value = highScore.format()
+    override val value get() = highScore.format()
 
     override fun update(event: Event, basedOn: Game2048) =
             when (event) {

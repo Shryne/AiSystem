@@ -1,11 +1,7 @@
 package logic.sequence
 
+import base._2048.ImmutablePossibleMovesArray
 import java.util.*
-
-interface ImmutablePossibleMovesArray {
-    val size: Int
-    operator fun get(index: Int): Int
-}
 
 /**
  * - mutable
@@ -13,7 +9,7 @@ interface ImmutablePossibleMovesArray {
  * @param
  * @return
  */
-class PossibleMovesArray(private val amount: Int) : ImmutablePossibleMovesArray {
+class PossibleMovesArray(private val amount: Int) : ImmutablePossibleMovesArray<Int> {
     private val container = IntArray(amount)
     override var size = 0
         private set

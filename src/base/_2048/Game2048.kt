@@ -7,13 +7,13 @@ package base._2048
  * to give some slight performance improvement, as it is necessary for the
  * model based agents.
  */
-interface Game2048 {
+interface Game2048<out M> {
     val highestTile: Int
 
     /**
      * This operation won't return a new list, but keep the old one and update it in case of any changes.
      */
-    val map: List<Int>
+    val map: M
 
     /**
      * @return The current score of the game. It is calculated by adding the result
@@ -28,7 +28,7 @@ interface Game2048 {
      * @return all moves that would change the map if executed by progress(move).
      * result.isEmpty() == true means the game ist over.
      */
-    val possibleMoves: ImmutablePossibleMovesArray
+    val possibleMoves: ImmutablePossibleMovesArray<Move2048>
 
     /**
      * Convenience method. Same as possibleMoves.isEmpty()

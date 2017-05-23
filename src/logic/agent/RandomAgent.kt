@@ -1,6 +1,7 @@
 package logic.agent
 
-import logic.sequence.ImmutablePossibleMovesArray
+import base._2048.ImmutablePossibleMovesArray
+import logic.sequence.ImmutableGame
 import logic.sequence.Player
 import utils.randomFast
 
@@ -9,12 +10,11 @@ import utils.randomFast
  * @param
  * @return
  */
-class RandomAgent : Player {
-    override fun move(possibleMoves: ImmutablePossibleMovesArray): Int {
-        return possibleMoves[randomFast(possibleMoves.size)]
-    }
-
-    override fun onGameOver() {}
+class RandomAgent<Move> : Player<ImmutableGame<*, Move>, Move> {
+    override fun move(immutableGame: ImmutableGame<*, Move>) =
+        immutableGame.possibleMoves.run {
+            this[randomFast(size)]
+        }
 
     override fun toString() = "RandomAgent"
 }

@@ -1,6 +1,7 @@
 package logic.agent
 
-import logic.sequence.ImmutablePossibleMovesArray
+import base._2048.ImmutablePossibleMovesArray
+
 
 /**
  * - mutable
@@ -8,6 +9,6 @@ import logic.sequence.ImmutablePossibleMovesArray
  * @param
  * @return
  */
-interface GeneralAgent {
-    fun move(state: Long, possibleMoves: ImmutablePossibleMovesArray): Int
+interface GeneralAgent<M> {
+    fun move(state: Long, possibleMoves: ImmutablePossibleMovesArray<M>): M
 }

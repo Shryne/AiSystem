@@ -6,7 +6,6 @@ package logic.sequence
  * @param
  * @return
  */
-interface Player {
-    fun move(possibleMoves: ImmutablePossibleMovesArray): Int
-    fun onGameOver()
+interface Player<in G : ImmutableGame<*, M>, M> {
+    fun move(immutableGame: G): M
 }

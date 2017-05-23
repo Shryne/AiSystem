@@ -3,6 +3,7 @@ package logic.sequence
 import base._2048.Game2048
 import base._2048.ImmutablePossibleMovesArray
 import base._2048.Move2048
+import logic.sequence.game2048.Immutable2048
 
 /**
  * - mutable
@@ -10,15 +11,12 @@ import base._2048.Move2048
  * @param
  * @return
  */
-class Sequence2048(val game: Game2048, val player: Player) : GameSequence {
-    private val possibleMoves = logic.sequence.PossibleMovesArray(Move2048.AMOUNT)
+class Sequence2048(private val game: Game2048<*>, val player: Player<Immutable2048<*>, Move2048>) : GameSequence {
+    private val immutableGame = Immutable2048(game)
 
     override fun step(amount: Int) =
         (0..amount - 1).forEach {
-            possibleMoves.synchronize(game.possibleMoves)
-            game.progress(
-                    player.move(possibleMoves).toMove()
-            )
+            game.progress(player.move(immutableGame))
             if (game.isOver) game.restart()
         }
 
@@ -26,7 +24,7 @@ class Sequence2048(val game: Game2048, val player: Player) : GameSequence {
     /*------------------------------------------------------------------------------------------------------------------
     private helper
     ------------------------------------------------------------------------------------------------------------------*/
-    private fun logic.sequence.PossibleMovesArray.synchronize(with: ImmutablePossibleMovesArray) {
+    private fun PossibleMovesArray.synchronize(with: ImmutablePossibleMovesArray<Move2048>) {
         for (i in 0..with.size - 1) {
             this[i] = with[i].toInt()
         }

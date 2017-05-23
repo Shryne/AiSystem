@@ -12,13 +12,13 @@ import logic.information.percentage
  * @param
  * @return
  */
-class HighestTileProbability(val highestTileReached: HighestTileReached) : Information<Game2048> {
+class HighestTileProbability(val highestTileReached: HighestTileReached) : Information<Game2048<*>> {
     private var gamesPlayed = 0
 
     override val name = "Highest tile probability"
     override val value get() = (highestTileReached.typedValue / gamesPlayed.toDouble()).percentage()
 
-    override fun update(event: Event, basedOn: Game2048) {
+    override fun update(event: Event, basedOn: Game2048<*>) {
         when (event) {
             Event.POST_GAME -> gamesPlayed++
             else            -> Unit

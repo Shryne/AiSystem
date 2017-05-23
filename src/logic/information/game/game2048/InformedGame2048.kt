@@ -12,8 +12,8 @@ import logic.information.Informed
  * @param
  * @return
  */
-class InformedGame2048(val game: Game2048) : Game2048 by game, Informed<Game2048> {
-    private val info: MutableList<Information<Game2048>> = ArrayList()
+class InformedGame2048<out M>(val game: Game2048<M>) : Game2048<M> by game, Informed<Game2048<M>> {
+    private val info: MutableList<Information<Game2048<M>>> = ArrayList()
 
     override fun progress(move: Move2048) {
         info.forEach { it.update(Event.PRE_MOVE, this) }
@@ -26,7 +26,7 @@ class InformedGame2048(val game: Game2048) : Game2048 by game, Informed<Game2048
         game.restart()
     }
 
-    override fun addAll(vararg information: Information<Game2048>) {
+    override fun addAll(vararg information: Information<Game2048<M>>) {
         info.addAll(information)
     }
 
@@ -35,5 +35,5 @@ class InformedGame2048(val game: Game2048) : Game2048 by game, Informed<Game2048
         info.removeAt(index)
     }
 
-    override fun toString() = "$game\nGameInfo:$info"
+    override fun toString() = "$game\nGameInfo$info"
 }

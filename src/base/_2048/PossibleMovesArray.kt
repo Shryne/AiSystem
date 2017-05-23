@@ -2,9 +2,9 @@ package base._2048
 
 import java.util.*
 
-interface ImmutablePossibleMovesArray {
+interface ImmutablePossibleMovesArray<T> {
     val size: Int
-    operator fun get(index: Int): Move2048
+    operator fun get(index: Int): T
 }
 
 /**
@@ -13,7 +13,7 @@ interface ImmutablePossibleMovesArray {
  * @param
  * @return
  */
-class PossibleMovesArray : ImmutablePossibleMovesArray {
+class PossibleMovesArray : ImmutablePossibleMovesArray<Move2048> {
     private val container = Array(Move2048.AMOUNT) { Move2048.LEFT } // Dummy value
     override var size = 0
         private set

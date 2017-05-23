@@ -12,8 +12,10 @@ import static utils.MathKt.randomFast;
 /**
  * This class is written in java, because it's impossible to write the long literals in kotlin without getting a
  * compile time error.
+ *
+ * 4.8M runs per second with random agent (Moves per second, Avg moves per second active)
  */
-public final class Game2048Binary implements Game2048 {
+public final class Game2048Binary implements Game2048<Long> {
     /*------------------------------------------------------------------------------------------------------------------
     static stuff
     ------------------------------------------------------------------------------------------------------------------*/
@@ -128,6 +130,7 @@ public final class Game2048Binary implements Game2048 {
                 executeMoveRight(board) == board && executeMoveDown(board) == board;
     }
 
+    @Override
     public void restart() {
         board = insertTileRand(
                 insertTileRand(0, randomNumber(), 16),
@@ -140,17 +143,26 @@ public final class Game2048Binary implements Game2048 {
 
     @NotNull
     @Override
-    public ImmutablePossibleMovesArray getPossibleMoves() {
+    public ImmutablePossibleMovesArray<Move2048> getPossibleMoves() {
         if (!possibleMovesDetermined) determinePossibleMoves();
         return possibleMoves;
     }
 
-    @NotNull
-    @Override
-    public List<Integer> getMap() {
-        throw new NotImplementedException();
+    public Long getBinaryMap() {
+        return board;
     }
 
+    public void setBinaryMap(Long map) {
+        board = map;
+    }
+
+    @NotNull
+    @Override
+    public Long getMap() {
+        return board;
+    }
+
+    @Override
     public int getScore() {
         return scoreHelper(board) - initialScore;
     }

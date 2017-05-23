@@ -12,7 +12,7 @@ import logic.information.format
  * @param
  * @return
  */
-class HighestTileReached : Information<Game2048> {
+class HighestTileReached : Information<Game2048<*>> {
     private var highestTile = 0
     private var amount = 0
 
@@ -20,7 +20,7 @@ class HighestTileReached : Information<Game2048> {
     override val value get() = amount.format()
     val typedValue get() = amount
 
-    override fun update(event: Event, basedOn: Game2048) =
+    override fun update(event: Event, basedOn: Game2048<*>) =
             when (event) {
                 Event.POST_GAME -> {
                     val currentHighestTile = basedOn.highestTile

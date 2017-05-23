@@ -12,14 +12,14 @@ import logic.information.format
  * @param
  * @return
  */
-class AvgScore : Information<Game2048> {
+class AvgScore : Information<Game2048<*>> {
     private var avgScore = 0.0
     private var gamesPlayed = 0
 
     override val name = "Average score"
     override val value get() = avgScore.format()
 
-    override fun update(event: Event, basedOn: Game2048) =
+    override fun update(event: Event, basedOn: Game2048<*>) =
             when (event) {
                 Event.POST_GAME -> {
                     avgScore = (avgScore * gamesPlayed + basedOn.score) / (gamesPlayed + 1)

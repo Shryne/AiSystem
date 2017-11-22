@@ -9,10 +9,9 @@ import base._2048.ImmutablePossibleMovesArray
  * @return
  */
 interface Simulation<Map, Move> {
-    var map: Map
-    val possibleMoves: ImmutablePossibleMovesArray<Move>
-    val isOver: Boolean
+    var startMap: Map
 
-    fun simulation(move: Move)
-    fun restart()
+    fun isOver(map: Map): Boolean
+    fun possibleMoves(map: Map): ImmutablePossibleMovesArray<Move>
+    fun simulation(move: Move, map: Map): Map
 }

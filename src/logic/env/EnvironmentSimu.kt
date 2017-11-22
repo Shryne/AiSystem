@@ -18,5 +18,7 @@ class EnvironmenSimu<in Map, Move>
 ) : Player<ImmutableGame<Map, Move>, Move> {
 
     override fun move(immutableGame: ImmutableGame<Map, Move>) =
-        agent.move(simulation.apply { map = immutableGame.map })
+        agent.move(simulation.apply { startMap = immutableGame.map })
+
+    override fun toString() = agent.toString()
 }

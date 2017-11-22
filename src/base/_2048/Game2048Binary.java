@@ -154,6 +154,7 @@ public final class Game2048Binary implements Game2048<Long> {
 
     public void setBinaryMap(Long map) {
         board = map;
+        determinePossibleMoves();
     }
 
     @NotNull
@@ -216,7 +217,7 @@ public final class Game2048Binary implements Game2048<Long> {
         return b1 | (b2 >> 24) | (b3 << 24);
     }
 
-    private static long executeMoveDown(long board) {
+    public static long executeMoveDown(long board) {
         long ret = board;
         long t = transpose(board);
         ret ^= COL_UP_TABLE[(int) (t & ROW_MASK)];

@@ -1,7 +1,9 @@
-package base.TicTacToe
+package base.tic_tac_toe
 
-import base.TicTacToe.TicTacToe.Companion.PLAYER1
-import base.TicTacToe.TicTacToe.Companion.PLAYER2
+import base._2048.ImmutablePossibleMovesArray
+import base._2048.asImmutableArray
+import base.tic_tac_toe.TicTacToe.Companion.PLAYER1
+import base.tic_tac_toe.TicTacToe.Companion.PLAYER2
 import java.util.*
 
 /**
@@ -40,13 +42,13 @@ class TicTacToe(oldGame: TicTacToe? = null) {
         else if (map.any { it == NO_PLAYER }) NO_PLAYER
         else DRAW
 
-    val possibleMoves: List<Int>
+    val possibleMoves: ImmutablePossibleMovesArray<Int>
         get() = ArrayList<Int>().apply {
             map.forEachIndexed {
                 index, _ ->
                 if (isFieldFree(index)) add(index)
             }
-        }
+        }.asImmutableArray()
 
     fun progress(field: Int) {
         assert(field in map.indices && map[field] == NO_PLAYER)

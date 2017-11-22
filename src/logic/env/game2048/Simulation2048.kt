@@ -1,9 +1,8 @@
 package logic.env.game2048
 
 import base._2048.Game2048Binary
+import base._2048.ImmutablePossibleMovesArray
 import base._2048.Move2048
-
-interface Simulation2048 : Simulation<Long, Move2048>
 
 /**
  * - mutable
@@ -11,23 +10,27 @@ interface Simulation2048 : Simulation<Long, Move2048>
  * @param
  * @return
  */
-class Simulation2048Binary : Simulation2048 {
+class Simulation2048Binary : Simulation<Long, Move2048> {
     private val game = Game2048Binary()
 
-    override val isOver get() = game.isOver
-    override var map: Long
+    override var startMap: Long
         get() = game.binaryMap
         set(value) {
             game.binaryMap = value
         }
 
-    override val possibleMoves get() = game.possibleMoves
-
-    override fun simulation(move: Move2048) {
-        game.progress(move)
+    override fun possibleMoves(map: Long): ImmutablePossibleMovesArray<Move2048> {
+        game.binaryMap = map
+        return game.possibleMoves
     }
 
-    override fun restart() {
-        game.restart()
+    override fun isOver(map: Long): Boolean {
+        game.binaryMap = map
+        return game.isOver
+    }
+
+    override fun simulation(move: Move2048, map: Long): Long {
+        game.progress(move)
+        return map
     }
 }

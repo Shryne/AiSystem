@@ -2,10 +2,16 @@ package base._2048
 
 import java.util.*
 
-interface ImmutablePossibleMovesArray<T> {
+interface ImmutablePossibleMovesArray<out T> {
     val size: Int
     operator fun get(index: Int): T
 }
+fun <E> List<E>.asImmutableArray() =
+        object : ImmutablePossibleMovesArray<E> {
+            override val size get() = this@asImmutableArray.size
+
+            override fun get(index: Int): E = this@asImmutableArray[index]
+        }
 
 /**
  * - mutable
@@ -29,6 +35,6 @@ class PossibleMovesArray : ImmutablePossibleMovesArray<Move2048> {
         size = index + 1
     }
 
-    operator fun contains(element: Move2048) = element in container
+    operator fun contains(element: Move2048) = (0..size - 1).any { container[it] == element }
     override fun toString() = Arrays.toString(Arrays.copyOfRange(container, 0, size))!!
 }

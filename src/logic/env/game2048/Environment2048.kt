@@ -16,4 +16,5 @@ class Environment2048(private val generalAgent: GeneralAgent<Move2048>) : Player
     override fun move(immutableGame: Immutable2048<Long>) =
             generalAgent.move(immutableGame.map, immutableGame.possibleMoves)
 
+    override fun toString() = generalAgent.toString()
 }

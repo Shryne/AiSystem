@@ -1,6 +1,5 @@
 package base.mill
 
-import base.BoardView
 import base._2048.ImmutablePossibleMovesArray
 
 /**
@@ -9,6 +8,6 @@ import base._2048.ImmutablePossibleMovesArray
  */
 interface MillView<out M> {
     val map: IntArray
-    val currentPlayer: Player
+    val player: Player
     val possibleMoves: ImmutablePossibleMovesArray<M>
 }

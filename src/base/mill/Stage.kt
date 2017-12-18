@@ -4,5 +4,6 @@ enum class Stage {
     SETTING,
     MOVING,
     JUMPING,
-    REMOVING
+    REMOVE1,
+    REMOVE2
 }

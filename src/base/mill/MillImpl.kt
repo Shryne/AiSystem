@@ -9,26 +9,35 @@ import java.util.*
  * @return
  */
 class MillImpl : MillPlay {
+    companion object {
+        // bit masks to get the source and target value from the move in the progress method.
+        private val SOURCE_MASK = 0x1_1111
+        private val TARGET_SHIFT = 5
+        private val TARGET_MASK = SOURCE_MASK shl TARGET_SHIFT
+    }
+
     override val map: IntArray
         get() {
             val result = IntArray(24)
             for (i in 0..23) {
-                result[i] = if (player1.stonesSetBoard and (1 shl i) == 1 shl i) 1 else 0
+                result[i] = if (p1.board and (1 shl i) == 1 shl i) 1 else 0
             }
             for (i in 0..23) {
-                result[i] = if (player2.stonesSetBoard and (1 shl i) == 1 shl i) 2 else result[i]
+                result[i] = if (p2.board and (1 shl i) == 1 shl i) 2 else result[i]
             }
             return result
         }
 
-    private val player1 = Player()
-    private val player2 = Player()
-    override var currentPlayer = player1
+    private var otherPlayer = Player()
+    override var player = Player()
         private set
+
+    private val p1 = player
+    private val p2 = otherPlayer
 
     override val possibleMoves = logic.sequence.PossibleMovesArray(24)
 
-    private val singleLines = intArrayOf(
+    private val singleLines = hashSetOf(
             // horizontal lines
             0b111_000_000_000_000_000_000_000,
             0b000_111_000_000_000_000_000_000,
@@ -49,7 +58,7 @@ class MillImpl : MillPlay {
             0b000_000_000_000_000_010_010_010
     )
 
-    private val doubleLines = intArrayOf(
+    private val doubleLines = hashSetOf(
             // doubles (out)
             0b111_000_000_100_000_000_000_100,
             0b111_000_000_000_001_000_000_001,
@@ -80,44 +89,15 @@ class MillImpl : MillPlay {
             0b000_000_100_111_000_100_000_000
     )
 
-    private var stage: Stage = Stage.SETTING
-    private var previousStage: Stage = stage
-
-    override fun progress(moveBoard: Int) {
-        // TODO: pre checks
-        when (stage) {
-            Stage.JUMPING,
-            Stage.MOVING   -> {
-                currentPlayer.stonesSetBoard = currentPlayer.stonesSetBoard or moveBoard
-                currentPlayer.toRemove = currentPlayer.millAmount()
-
-                if (currentPlayer.toRemove != 0) {
-                    previousStage = stage
-                    stage = Stage.REMOVING
-                } else currentPlayer = currentPlayer.other()
-            }
-            Stage.SETTING  -> {
-                currentPlayer.stonesSetBoard = currentPlayer.stonesSetBoard or moveBoard
-                currentPlayer.toRemove = currentPlayer.millAmount()
-
-                currentPlayer.stonesToSet--
-                if (currentPlayer.toRemove != 0) {
-                    previousStage = stage
-                    stage = Stage.REMOVING
-                } else currentPlayer = currentPlayer.other()
-            }
-            Stage.REMOVING -> {
-                currentPlayer.other().stonesSetBoard = currentPlayer.other().stonesSetBoard xor moveBoard
-                currentPlayer.toRemove--
-                currentPlayer.other().amountOfStones--
-                if (currentPlayer.toRemove == 0) {
-                    stage = previousStage
-                    currentPlayer = currentPlayer.other()
-                }
-            }
-        }
-
-        currentPlayer.other().possibleMovesUpdate()
+    /**
+     * - mutable - changes the state of the board and player
+     * @param Move consists of two 5 bit values, the first for the source and the second for the target position. The
+     * target is only used in all stages besides the SETTING stage. The format is: 0000_0000_..._[second move 5 bits]
+     * [first move 5 bits]
+     */
+    override fun progress(move: Int) {
+        player.board = player.board or (1 shl move)
+        switchPlayers()
     }
 
     override fun reset() {
@@ -125,48 +105,48 @@ class MillImpl : MillPlay {
     }
 
     override fun toString() =
-            "Mill (currentPlayer: $currentPlayer, stage: $stage):\n${Arrays.toString(map)}"
-    /*-----------------------------------------------------
+            "Mill (Player stage: ${player.stage}, other player stage: ${otherPlayer.stage}):\n${mapToString()}"
+
+    /*------------------------------------------------------------------------------------------------------------------
     private helper
-    -----------------------------------------------------*/
-    private fun Player.millAmount(): Int {
-        for (it in doubleLines) {
-            if (it and stonesSetBoard == it && it and previousMillBoards != it) {
-                previousMillBoards = previousMillBoards and it
-                return 2
-            }
-        }
+    ------------------------------------------------------------------------------------------------------------------*/
+    private fun Int.hasMill() = this in singleLines
 
-        for (it in singleLines) {
-            if (it and stonesSetBoard == it && it and previousMillBoards != it) {
-                previousMillBoards = previousMillBoards and it
-                return 1
-            }
-        }
-        return 0
+    private fun Int.has2Mills() = this in doubleLines
+
+    private fun switchPlayers() {
+        val temp = player
+        player = otherPlayer
+        otherPlayer = temp
     }
 
-    private fun Player.other() =
-            when (this) {
-                player1 -> player2
-                player2 -> player1
-                else    -> error("There cannot be another player (arg: $this)")
-            }
-
-    private fun Player.possibleMovesUpdate() {
-        when (stage) {
-            Stage.SETTING -> {
-                val empties = (player1.stonesSetBoard or player2.stonesSetBoard).inv()
-                for (i in 0..23) {
-                    if (empties and (1 shl i) == 1 shl i) {
-                        possibleMoves[i] = 1 shl i
-                    }
-                }
-            }
-            Stage.REMOVING -> {
-                val board = other().stonesSetBoard
-
-            }
-        }
-    }
+    /**
+     * source: https://github.com/theoriginalbit/nine-mens-morris/blob/master/src/main/java/asburyj/nmm/View.java
+     * Note: I used consolas as font to get the correct view.
+     */
+    private fun mapToString() =
+            System.out.format(
+                    "┏━━━┓             ┏━━━┓             ┏━━━┓\n" +
+                    "┃ %d ┣━━━━━━━━━━━━━┫ %d ┣━━━━━━━━━━━━━┫ %d ┃\n" +
+                    "┗━┳━┛             ┗━┳━┛             ┗━┳━┛\n" +
+                    "  ┃   ┏━━━┓       ┏━┻━┓       ┏━━━┓   ┃\n" +
+                    "  ┃   ┃ %d ┣━━━━━━━┫ %d ┣━━━━━━━┫ %d ┃   ┃\n" +
+                    "  ┃   ┗━┳━┛       ┗━┳━┛       ┗━┳━┛   ┃\n" +
+                    "  ┃     ┃   ┏━━━┓ ┏━┻━┓ ┏━━━┓   ┃     ┃\n" +
+                    "  ┃     ┃   ┃ %d ┣━┫ %d ┣━┫ %d ┃   ┃     ┃\n" +
+                    "  ┃     ┃   ┗━┳━┛ ┗━━━┛ ┗━┳━┛   ┃     ┃\n" +
+                    "┏━┻━┓ ┏━┻━┓ ┏━┻━┓       ┏━┻━┓ ┏━┻━┓ ┏━┻━┓\n" +
+                    "┃ %d ┣━┫ %d ┣━┫ %d ┃       ┃ %d ┣━┫ %d ┣━┫ %d ┃\n" +
+                    "┗━┳━┛ ┗━┳━┛ ┗━┳━┛       ┗━┳━┛ ┗━┳━┛ ┗━┳━┛\n" +
+                    "  ┃     ┃   ┏━┻━┓ ┏━━━┓ ┏━┻━┓   ┃     ┃\n" +
+                    "  ┃     ┃   ┃ %d ┣━┫ %d ┣━┫ %d ┃   ┃     ┃\n" +
+                    "  ┃     ┃   ┗━━━┛ ┗━┳━┛ ┗━━━┛   ┃     ┃\n" +
+                    "  ┃   ┏━┻━┓       ┏━┻━┓       ┏━┻━┓   ┃\n" +
+                    "  ┃   ┃ %d ┣━━━━━━━┫ %d ┣━━━━━━━┫ %d ┃   ┃\n" +
+                    "  ┃   ┗━━━┛       ┗━┳━┛       ┗━━━┛   ┃\n" +
+                    "┏━┻━┓             ┏━┻━┓             ┏━┻━┓\n" +
+                    "┃ %d ┣━━━━━━━━━━━━━┫ %d ┣━━━━━━━━━━━━━┫ %d ┃\n" +
+                    "┗━━━┛             ┗━━━┛             ┗━━━┛\n",
+                    *map.toTypedArray()
+            )
 }

@@ -1,0 +1,8 @@
+- object -> singleton stages. At least they are immutable
+- The order has to be set by the programmer and it has to be unique starting from 0
+    -> must be set on all stages and in player.stage -> lost single point of control
+- The stages have to know the requirements to switch to all other stages. Would make much more sense, if a stage would
+know there requirements needed to switch to it
+- The extraction and creation of the bit sets is risky -> have to be sure that the areas don't overlap each other
+
+TODO: Removing a mill has to be disabled

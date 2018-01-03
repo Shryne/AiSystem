@@ -1,196 +1,115 @@
 package base.mill
 
-import logic.sequence.PossibleMovesArray
+import base.mill.stage.*
 
-class Player {
-    var stonesToSet = 9
-    var amountOfStones = 9
-    var board = 0
-    var stage = Stage.SETTING
-    var previousStage = stage
+/**
+ * The Player is coded in an Int for performance reasons. He has four variables: board, stonesToSet, stage and
+ * num.
+ * See [player]
+ */
+typealias Player = Int
 
-    private val moves: PossibleMovesArray = PossibleMovesArray(24)
+const val PLAYER_BIT_AMOUNT = 32
+const val STONES_TO_SET_BIT_AMOUNT = 4
+const val STAGES_BIT_AMOUNT = 3
 
-    private val movesSetting: PossibleMovesArray = PossibleMovesArray(24)
-    private val movesJumpMove: PossibleMovesArray = PossibleMovesArray(24)
-    private val movesRemoving: PossibleMovesArray = PossibleMovesArray(24)
-
-    private val transitions = arrayOf(
-            intArrayOf( // 0
-                    0b110_000_000_000_000_000_000_000,
-                    0b100_000_000_100_000_000_000_000
-            ),
-            intArrayOf( // 1
-                    0b110_000_000_000_000_000_000_000,
-                    0b011_000_000_000_000_000_000_000,
-                    0b010_010_000_000_000_000_000_000
-            ),
-            intArrayOf( // 2
-                    0b011_000_000_000_000_000_000_000,
-                    0b001_000_000_000_001_000_000_000
-            ),
-            intArrayOf( // 3
-                    0b000_110_000_000_000_000_000_000,
-                    0b000_100_000_010_000_000_000_000
-            ),
-            intArrayOf( // 4
-                    0b000_110_000_000_000_000_000_000,
-                    0b000_011_000_000_000_000_000_000,
-                    0b010_010_000_000_000_000_000_000,
-                    0b000_010_010_000_000_000_000_000
-            ),
-            intArrayOf( // 5
-                    0b000_011_000_000_000_000_000_000,
-                    0b000_001_000_000_010_000_000_000
-            ),
-            intArrayOf( // 6
-                    0b000_000_110_000_000_000_000_000,
-                    0b000_000_100_001_000_000_000_000
-            ),
-            intArrayOf( // 7
-                    0b000_000_110_000_000_000_000_000,
-                    0b000_000_011_000_000_000_000_000,
-                    0b000_010_010_000_000_000_000_000
-            ),
-            intArrayOf( // 8
-                    0b000_000_011_000_000_000_000_000,
-                    0b000_000_001_000_100_000_000_000
-            ),
-            intArrayOf( // 9
-                    0b000_000_000_110_000_000_000_000,
-                    0b100_000_000_100_000_000_000_000,
-                    0b000_000_000_100_000_000_000_100
-            ),
-            intArrayOf( // 10
-                    0b000_000_000_110_000_000_000_000,
-                    0b000_000_000_011_000_000_000_000,
-                    0b000_100_000_010_000_000_000_000,
-                    0b000_000_000_010_000_000_100_000
-            ),
-            intArrayOf( // 11
-                    0b000_000_000_011_000_000_000_000,
-                    0b000_000_100_001_000_000_000_000,
-                    0b000_000_000_001_000_100_000_000
-            ),
-            intArrayOf( // 12
-                    0b000_000_000_000_110_000_000_000,
-                    0b000_000_001_000_100_000_000_000,
-                    0b000_000_000_000_100_001_000_000
-            ),
-            intArrayOf( // 13
-                    0b000_000_000_000_110_000_000_000,
-                    0b000_000_000_000_011_000_000_000,
-                    0b000_001_000_000_010_000_000_000,
-                    0b000_000_000_000_010_000_001_000
-            ),
-            intArrayOf( // 14
-                    0b000_000_000_000_011_000_000_000,
-                    0b001_000_000_000_001_000_000_000,
-                    0b000_000_000_000_001_000_000_001
-            ),
-            intArrayOf( // 15
-                    0b000_000_000_000_000_110_000_000,
-                    0b000_000_000_001_000_100_000_000
-            ),
-            intArrayOf( // 16
-                    0b000_000_000_000_000_110_000_000,
-                    0b000_000_000_000_000_011_000_000,
-                    0b000_000_000_000_000_010_010_000
-            ),
-            intArrayOf( // 17
-                    0b000_000_000_000_000_011_000_000,
-                    0b000_000_000_000_100_001_000_000
-            ),
-            intArrayOf( // 18
-                    0b000_000_000_000_000_000_110_000,
-                    0b000_000_000_010_000_000_100_000
-            ),
-            intArrayOf( // 19
-                    0b000_000_000_000_000_000_110_000,
-                    0b000_000_000_000_000_000_011_000,
-                    0b000_000_000_000_000_010_010_000,
-                    0b000_000_000_000_000_000_010_010
-            ),
-            intArrayOf( // 20
-                    0b000_000_000_000_000_000_011_000,
-                    0b000_000_000_000_010_000_001_000
-            ),
-            intArrayOf( // 21
-                    0b000_000_000_000_000_000_000_110,
-                    0b000_000_000_100_000_000_000_100
-            ),
-            intArrayOf( // 22
-                    0b000_000_000_000_000_000_000_110,
-                    0b000_000_000_000_000_000_000_011,
-                    0b000_000_000_000_000_000_010_010
-            ),
-            intArrayOf( // 23
-                    0b000_000_000_000_000_000_000_011,
-                    0b000_000_000_000_001_000_000_001
-            )
-    )
-
-    fun progress(move: Int, other: Player) {
-        when (stage) {
-            Stage.SETTING -> {
-                val moveBoard = move or (1 shl move)
-                board = board or moveBoard
-                stonesToSet--
-                other.movesRemoving.add(move)
-                addTransitions(movesJumpMove, move, board))
-
-                if (player.board.has2Mills()) {
-                    player.previousStage = Stage.SETTING
-                    player.stage = Stage.REMOVE2
-                } else if (player.board.hasMill()) {
-                    player.previousStage = Stage.SETTING
-                    player.stage = Stage.REMOVE1
-                } else {
-                    switchPlayers()
-                }
+/**
+ * Creates an int with a special coding that represents a player. The first 24 bits are used for the board, the next
+ * 4 bits (0 - 9) for the left stones to set during the setting phase, the following 3 bits are used for the stages
+ * (j, m, r1, r2, s -> 5, 3 bits) and the last bit is used for the players identity (0 or 1).
+ *
+ * This method checks the input only in assert mode for performance reasons!
+ * -> tested <-
+ *
+ * @param stage The current stage of the player.
+ * @param stonesToSet The stones left to be set. This values must be between 1 and 9 (inclusive) during the setting
+ * stage and equal to 0 during the other stages except the removing stages. The last is because the removing stages fall
+ * back to the previous stage the player had and it can possibly and is determined by the stonesToSet variable if he
+ * falls back on the setting stage.
+ * @param board Contains all stones this player has on the board. This method doesn't and can't ensure that the board
+ * of this player doesn't overlap with the other players board.
+ * @param num The number of the player to distinguish them.
+ *
+ * @return The player inside an integer.
+ */
+fun player(num: Int, stage: Stage, stonesToSet: Int, board: Board): Int {
+    assert(board.isValidBoard and
+            when {
+                stage == Setting                        -> (0 < stonesToSet) and (stonesToSet <= 9)
+                (stage == Moving) or (stage == Jumping) -> stonesToSet == 0
+                else                                    -> true
             }
+    ) {
+        "Error. Values: [isValidBoard: ${board.isValidBoard}, stage: $stage, stonesToSet: $stonesToSet}"
+    }
+
+    return (num shl (MILL_FIELDS + STAGES_BIT_AMOUNT + STONES_TO_SET_BIT_AMOUNT)) or
+            (stage.order shl (MILL_FIELDS + STONES_TO_SET_BIT_AMOUNT)) or
+            (stonesToSet shl MILL_FIELDS) or
+            board
+}
+
+/**
+ * Extracts the stonesToSet value from the player.
+ *
+ * -> tested <-
+ * This method checks the input only in assert mode for performance reasons!
+ */
+val Player.stonesToSet: Int
+    get() {
+        assert(isValidPlayer)
+        return (this shr MILL_FIELDS) and 0xF
+    }
+
+/**
+ * Extracts the board from the player.
+ *
+ * -> tested <-
+ * This method checks the input only in assert mode for performance reasons!
+ */
+val Player.board: Int
+    get() {
+        assert(isValidPlayer)
+        return this and 0xFFFFFF
+    }
+
+/**
+ * Extracts the stage value from the player.
+ *
+ * -> tested <-
+ * This method checks the input only in assert mode for performance reasons!
+ */
+val Player.stage: Stage
+    get() {
+        assert(isValidPlayer)
+        return when ((this shr (MILL_FIELDS + STONES_TO_SET_BIT_AMOUNT)) and 0b111) {
+            0    -> Setting
+            1    -> Moving
+            2    -> Jumping
+            3    -> Removing1
+            4    -> Removing2
+            else -> throw IllegalStateException("Stage must be between 0 and 4 but is $this")
         }
     }
 
-    fun moves(other: Player) {
-        when (stage) {
-            Stage.SETTING -> {
-                val empties = (board or other.board).inv()
-                for (i in 0..23) {
-                    if (empties and (1 shl i) == 1 shl i) {
-                        moves[i] = 1 shl i
-                    }
-                }
-            }
-            Stage.REMOVE1, Stage.REMOVE2 -> {
-                for (i in 0..23) {
-                    if (other.board and (1 shl i) == 1 shl i) {
-                        moves[i] = 1 shl i
-                    }
-                }
-            }
-            Stage.JUMPING -> {
-                
-            }
-        }
+val Player.num: Int
+    get() {
+        assert(isValidPlayer)
+        return (this shr (MILL_FIELDS + STONES_TO_SET_BIT_AMOUNT + STAGES_BIT_AMOUNT)) and 0x1 /* to get rid of the sign
+        bit */
     }
 
-    fun reset() {
-        stonesToSet = 9
-        amountOfStones = 9
-        board = 0
-        stage = Stage.SETTING
-        // It's not necessary to set the previous stage
-    }
+val Player.isValidPlayer get() = true
 
-    /*------------------------------------------------------------------------------------------------------------------
-    private helper
-    ------------------------------------------------------------------------------------------------------------------*/
-    private fun transitions(to: PossibleMovesArray, move: Int, withoutBoard: Int) {
-        transitions[move].forEach {
-            if ((it and withoutBoard) != 0) { // == the move is free on the board
-                to.add(it)
-            }
-        }
-    }
+fun Player.playerBinaryPrint(tabAmount: Int = 0): Player {
+    val additionalTabs = "\t".repeat(tabAmount)
+
+    var result = "${additionalTabs}Player:\n"
+    result += "$additionalTabs\tNum: $num\n"
+    result += "$additionalTabs\tStage: $stage\n"
+    result += "$additionalTabs\tStonesToSet: $stonesToSet\n"
+    result += "$additionalTabs\t"
+    print(result)
+    board.boardBinaryPrint()
+    return this
 }

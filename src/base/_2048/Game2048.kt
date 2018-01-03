@@ -37,7 +37,7 @@ interface Game2048<out M> {
 
     /**
      * To play the game, one has to use this method. It executes the given move
-     * and spawns a new field (2 - 90%, 4 - 10%) on a randomly chosen with 0 filled.
+     * and spawns a new move (2 - 90%, 4 - 10%) on a randomly chosen with 0 filled.
      * If there isn't any possible move left, isRunning turns into false and the
      * game is over. It's still possible to call this method, but it's state won't be
      * changed.

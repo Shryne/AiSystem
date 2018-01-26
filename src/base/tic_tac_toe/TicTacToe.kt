@@ -1,7 +1,6 @@
 package base.tic_tac_toe
 
-import base._2048.ImmutablePossibleMovesArray
-import base._2048.asImmutableArray
+import base.EventualMemoryArray
 import base.tic_tac_toe.TicTacToe.Companion.PLAYER1
 import base.tic_tac_toe.TicTacToe.Companion.PLAYER2
 import java.util.*
@@ -42,7 +41,7 @@ class TicTacToe(oldGame: TicTacToe? = null) {
         else if (map.any { it == NO_PLAYER }) NO_PLAYER
         else DRAW
 
-    val possibleMoves: ImmutablePossibleMovesArray<Int>
+    val possibleMoves: EventualMemoryArray<Int>
         get() = ArrayList<Int>().apply {
             map.forEachIndexed {
                 index, _ ->
@@ -102,3 +101,16 @@ val String.other
         PLAYER2 -> PLAYER1
         else    -> error("There is no player $this!")
     }
+
+fun <E> List<E>.asImmutableArray() =
+        object : EventualMemoryArray<E> {
+            private val container = this@asImmutableArray
+
+            override val size: Int = container.size
+
+            override fun set(index: Int, elem: E) {
+                UnsupportedOperationException()
+            }
+
+            override fun get(index: Int) = container[index]
+        }

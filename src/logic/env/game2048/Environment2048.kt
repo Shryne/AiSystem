@@ -1,6 +1,5 @@
 package logic.env.game2048
 
-import base._2048.ImmutablePossibleMovesArray
 import base._2048.Move2048
 import logic.agent.GeneralAgent
 import logic.sequence.Player

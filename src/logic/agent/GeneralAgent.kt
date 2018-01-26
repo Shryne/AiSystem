@@ -1,6 +1,6 @@
 package logic.agent
 
-import base._2048.ImmutablePossibleMovesArray
+import base.EventualMemoryArray
 
 
 /**
@@ -10,5 +10,5 @@ import base._2048.ImmutablePossibleMovesArray
  * @return
  */
 interface GeneralAgent<M> {
-    fun move(state: Long, possibleMoves: ImmutablePossibleMovesArray<M>): M
+    fun move(state: Long, possibleMoves: EventualMemoryArray<M>): M
 }

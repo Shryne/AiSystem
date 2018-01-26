@@ -1,5 +1,6 @@
 package base._2048;
 
+import base.EventualMemoryArray;
 import org.jetbrains.annotations.NotNull;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -143,7 +144,7 @@ public final class Game2048Binary implements Game2048<Long> {
 
     @NotNull
     @Override
-    public ImmutablePossibleMovesArray<Move2048> getPossibleMoves() {
+    public EventualMemoryArray<Move2048> getPossibleMoves() {
         if (!possibleMovesDetermined) determinePossibleMoves();
         return possibleMoves;
     }

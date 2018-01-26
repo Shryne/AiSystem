@@ -1,6 +1,6 @@
 package logic.env.game2048
 
-import base._2048.ImmutablePossibleMovesArray
+import base.EventualMemoryArray
 
 /**
  * - mutable
@@ -12,6 +12,6 @@ interface Simulation<Map, Move> {
     var startMap: Map
 
     fun isOver(map: Map): Boolean
-    fun possibleMoves(map: Map): ImmutablePossibleMovesArray<Move>
+    fun possibleMoves(map: Map): EventualMemoryArray<Move>
     fun simulation(move: Move, map: Map): Map
 }

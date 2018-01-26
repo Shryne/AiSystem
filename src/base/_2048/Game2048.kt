@@ -1,5 +1,7 @@
 package base._2048
 
+import base.EventualMemoryArray
+
 /**
  * - mutable because of progress and restart
  *
@@ -28,7 +30,7 @@ interface Game2048<out M> {
      * @return all moves that would change the map if executed by progress(move).
      * result.isEmpty() == true means the game ist over.
      */
-    val possibleMoves: ImmutablePossibleMovesArray<Move2048>
+    val possibleMoves: EventualMemoryArray<Move2048>
 
     /**
      * Convenience method. Same as possibleMoves.isEmpty()

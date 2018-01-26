@@ -1,7 +1,7 @@
 package logic.env.game2048
 
+import base.EventualMemoryArray
 import base._2048.Game2048Binary
-import base._2048.ImmutablePossibleMovesArray
 import base._2048.Move2048
 
 /**
@@ -19,7 +19,7 @@ class Simulation2048Binary : Simulation<Long, Move2048> {
             game.binaryMap = value
         }
 
-    override fun possibleMoves(map: Long): ImmutablePossibleMovesArray<Move2048> {
+    override fun possibleMoves(map: Long): EventualMemoryArray<Move2048> {
         game.binaryMap = map
         return game.possibleMoves
     }

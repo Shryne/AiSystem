@@ -1,6 +1,5 @@
 package logic.agent
 
-import base._2048.ImmutablePossibleMovesArray
 import logic.sequence.ImmutableGame
 import logic.sequence.Player
 import utils.randomFast

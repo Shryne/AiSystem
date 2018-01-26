@@ -1,6 +1,6 @@
 package logic.sequence
 
-import base._2048.ImmutablePossibleMovesArray
+import base.EventualMemoryArray
 import java.util.*
 
 /**
@@ -9,7 +9,7 @@ import java.util.*
  * @param
  * @return
  */
-class PossibleMovesArray(private val amount: Int) : ImmutablePossibleMovesArray<Int> {
+class PossibleMovesArray(private val amount: Int) : EventualMemoryArray<Int> {
     private val container = IntArray(amount)
     override var size = 0
         private set
@@ -19,7 +19,7 @@ class PossibleMovesArray(private val amount: Int) : ImmutablePossibleMovesArray<
         return container[index]
     }
 
-    operator fun set(index: Int, element: Int) {
+    override operator fun set(index: Int, element: Int) {
         assert(index in 0..amount - 1)
         container[index] = element
         size = index + 1

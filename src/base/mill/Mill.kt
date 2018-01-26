@@ -18,14 +18,23 @@ fun mill(player: Player, otherPlayer: Player) =
         player 1 the first bit will be set and the long cast will set all new leading bits to 1. I have to use the 32
         bit mask for this reason. */
 
+fun mill() = mill(player(0), player(1))
+
 fun Mill.moves(to: MoveArray) {
     player.stage.moves(this, to)
 }
+
+val Mill.over: Boolean get() = (player.board.stoneAmount < 3) or (otherPlayer.board.stoneAmount < 3)
+
+val Mill.board: Long
+    get() = ((player.board.toLong() shl MILL_FIELDS) and (otherPlayer.board.toLong())) and 0xFFFFFF_FFFFFF
 
 fun Mill.moved(move: Move) = player.stage.moved(this, move)
 
 val Mill.player get() = ((this shr PLAYER_BIT_AMOUNT) and 0xFFFF_FFFF).toInt()
 val Mill.otherPlayer get() = (this and 0xFFFF_FFFF).toInt()
+
+
 
 /**
  * Fills the given array based on both players boards inside the given long.

@@ -49,6 +49,9 @@ fun player(num: Int, stage: Stage, stonesToSet: Int, board: Board): Int {
             board
 }
 
+// TODO: Add constants
+fun player(num: Int) = player(num, Setting, 9, 0)
+
 /**
  * Extracts the stonesToSet value from the player.
  *

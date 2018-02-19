@@ -9,7 +9,7 @@ object Jumping: Stage {
 
     /**
      * The given move must contain the source and the target stone. The source stone will be removed from the current
-     * players board and the target stone will be added. This stage can transition to Jumping or Removing1.
+     * players board and the target stone will be added. This stage can transition to Jumping or Removing.
      *
      * -> tested <-
      */
@@ -59,7 +59,7 @@ object Jumping: Stage {
     ------------------------------------------------------------------------------------------------------------------*/
     private fun next(playerBoard: Int, targetMove: Move) =
             when {
-                playerBoard.isMill(targetMove) -> Removing1
+                playerBoard.isMill(targetMove) -> Removing
                 else                     -> this
             }
 }

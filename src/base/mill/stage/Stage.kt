@@ -36,7 +36,7 @@ interface Stage {
     /**
      * This method is needed, because some stages don't switch the players (= the same player can do multiple turns in
      * a row -> removing1/2). This method will be called by the stages to decide which player will do the next turn.
-     * In case of Removing1 and 2 it will return the players in the same order (game(player, otherPlayer) and the other
+     * In case of Removing and 2 it will return the players in the same order (game(player, otherPlayer) and the other
      * stages will return the players in reversed order (game(otherPlayer, player)).
      * @param player The current player
      * @param otherPlayer

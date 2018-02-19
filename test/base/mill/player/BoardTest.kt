@@ -3,7 +3,7 @@ package base.mill.player
 import base.mill.board
 import base.mill.player
 import base.mill.stage.Moving
-import base.mill.stage.Removing1
+import base.mill.stage.Removing
 import base.mill.stage.Setting
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -67,7 +67,7 @@ class BoardTest {
     fun removing1Empty() {
         assertEquals(
                 0b000_000_000_000_000_000_000_000,
-                player(0, Removing1, 0, 0b000_000_000_000_000_000_000_000).board
+                player(0, Removing, 0, 0b000_000_000_000_000_000_000_000).board
         )
     }
 

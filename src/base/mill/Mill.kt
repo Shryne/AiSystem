@@ -6,6 +6,8 @@ typealias Move = Int
 typealias Mill = Long
 
 const val MILL_FIELDS = 24
+private const val ANSI_RESET = "\u001B[0m"
+private const val ANSI_RED = "\u001B[31m"
 
 /**
  * Returns a Long that forms the mill game state. The current player is on the last 32 bits and the current on the
@@ -24,7 +26,7 @@ fun Mill.moves(to: MoveArray) {
     player.stage.moves(this, to)
 }
 
-val Mill.over: Boolean get() = (player.board.stoneAmount < 3) or (otherPlayer.board.stoneAmount < 3)
+val Mill.over: Boolean get() = player.lost || otherPlayer.lost
 
 val Mill.board: Long
     get() = ((player.board.toLong() shl MILL_FIELDS) and (otherPlayer.board.toLong())) and 0xFFFFFF_FFFFFF
@@ -33,7 +35,6 @@ fun Mill.moved(move: Move) = player.stage.moved(this, move)
 
 val Mill.player get() = ((this shr PLAYER_BIT_AMOUNT) and 0xFFFF_FFFF).toInt()
 val Mill.otherPlayer get() = (this and 0xFFFF_FFFF).toInt()
-
 
 
 /**
@@ -55,7 +56,7 @@ fun Mill.map(to: IntArray): IntArray {
                 when (field) {
                     (player.board and field)      -> playerNumber
                     (otherPlayer.board and field) -> otherPlayerNumber
-                    else                          -> 0
+                    else                          -> 9
                 }
     }
 
@@ -71,33 +72,44 @@ fun Mill.map(to: IntArray): IntArray {
  */
 val Mill.asString: String
     get() {
-        require(isValidMill) {
+        assert(isValidMill) {
             println("The mill isn't valid: $this")
         }
-        return System.out.format(
+        return String.format(
                 "┏━━━┓             ┏━━━┓             ┏━━━┓\n" +
-                        "┃ %d ┣━━━━━━━━━━━━━┫ %d ┣━━━━━━━━━━━━━┫ %d ┃\n" +
+                        "┃ %s ┣━━━━━━━━━━━━━┫ %s ┣━━━━━━━━━━━━━┫ %s ┃\n" +
                         "┗━┳━┛             ┗━┳━┛             ┗━┳━┛\n" +
                         "  ┃   ┏━━━┓       ┏━┻━┓       ┏━━━┓   ┃\n" +
-                        "  ┃   ┃ %d ┣━━━━━━━┫ %d ┣━━━━━━━┫ %d ┃   ┃\n" +
+                        "  ┃   ┃ %s ┣━━━━━━━┫ %s ┣━━━━━━━┫ %s ┃   ┃\n" +
                         "  ┃   ┗━┳━┛       ┗━┳━┛       ┗━┳━┛   ┃\n" +
                         "  ┃     ┃   ┏━━━┓ ┏━┻━┓ ┏━━━┓   ┃     ┃\n" +
-                        "  ┃     ┃   ┃ %d ┣━┫ %d ┣━┫ %d ┃   ┃     ┃\n" +
+                        "  ┃     ┃   ┃ %s ┣━┫ %s ┣━┫ %s ┃   ┃     ┃\n" +
                         "  ┃     ┃   ┗━┳━┛ ┗━━━┛ ┗━┳━┛   ┃     ┃\n" +
                         "┏━┻━┓ ┏━┻━┓ ┏━┻━┓       ┏━┻━┓ ┏━┻━┓ ┏━┻━┓\n" +
-                        "┃ %d ┣━┫ %d ┣━┫ %d ┃       ┃ %d ┣━┫ %d ┣━┫ %d ┃\n" +
+                        "┃ %s ┣━┫ %s ┣━┫ %s ┃       ┃ %s ┣━┫ %s ┣━┫ %s ┃\n" +
                         "┗━┳━┛ ┗━┳━┛ ┗━┳━┛       ┗━┳━┛ ┗━┳━┛ ┗━┳━┛\n" +
                         "  ┃     ┃   ┏━┻━┓ ┏━━━┓ ┏━┻━┓   ┃     ┃\n" +
-                        "  ┃     ┃   ┃ %d ┣━┫ %d ┣━┫ %d ┃   ┃     ┃\n" +
+                        "  ┃     ┃   ┃ %s ┣━┫ %s ┣━┫ %s ┃   ┃     ┃\n" +
                         "  ┃     ┃   ┗━━━┛ ┗━┳━┛ ┗━━━┛   ┃     ┃\n" +
                         "  ┃   ┏━┻━┓       ┏━┻━┓       ┏━┻━┓   ┃\n" +
-                        "  ┃   ┃ %d ┣━━━━━━━┫ %d ┣━━━━━━━┫ %d ┃   ┃\n" +
+                        "  ┃   ┃ %s ┣━━━━━━━┫ %s ┣━━━━━━━┫ %s ┃   ┃\n" +
                         "  ┃   ┗━━━┛       ┗━┳━┛       ┗━━━┛   ┃\n" +
                         "┏━┻━┓             ┏━┻━┓             ┏━┻━┓\n" +
-                        "┃ %d ┣━━━━━━━━━━━━━┫ %d ┣━━━━━━━━━━━━━┫ %d ┃\n" +
+                        "┃ %s ┣━━━━━━━━━━━━━┫ %s ┣━━━━━━━━━━━━━┫ %s ┃\n" +
                         "┗━━━┛             ┗━━━┛             ┗━━━┛\n",
-                *map(IntArray(MILL_FIELDS)).toTypedArray()
-        ).toString()
+                *map(IntArray(MILL_FIELDS)).map {
+                        when(it) {
+                            0 -> ANSI_RED + "0" + ANSI_RESET
+                            1 -> ANSI_RED + "1" + ANSI_RESET
+                            else -> " "
+                        }
+                }.toTypedArray()
+        ) +
+                when {
+                    player.lost      -> "Player ${otherPlayer.num} won"
+                    otherPlayer.lost -> "Player ${player.num} won"
+                    else             -> ""
+                }
     }
 
 //TODO

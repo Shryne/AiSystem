@@ -43,10 +43,10 @@ class SettingTest {
     }
 
     @Test
-    fun toRemoving1() {
+    fun toRemoving() {
         assertEquals(
                 mill(
-                        player(0, Removing1, 6, 0b000_000_111_000_000_000_000_000),
+                        player(0, Removing, 6, 0b000_000_111_000_000_000_000_000),
                         player(1, Setting, 7, 0b000_101_000_000_000_000_000_000)
                 ),
                 Setting.moved(
@@ -55,23 +55,6 @@ class SettingTest {
                                 player(1, Setting, 7, 0b000_101_000_000_000_000_000_000)
                         ),
                         move(16)
-                )
-        )
-    }
-
-    @Test
-    fun toRemoving2() {
-        assertEquals(
-                mill(
-                        player(0, Removing2, 4, 0b000_000_000_000_000_010_010_111),
-                        player(1, Setting, 5, 0b110_101_000_000_000_000_000_000)
-                ),
-                Setting.moved(
-                        mill(
-                                player(0, Setting, 5, 0b000_000_000_000_000_010_010_101),
-                                player(1, Setting, 5, 0b110_101_000_000_000_000_000_000)
-                        ),
-                        move(1)
                 )
         )
     }

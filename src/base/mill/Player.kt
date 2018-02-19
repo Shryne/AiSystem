@@ -89,8 +89,7 @@ val Player.stage: Stage
             0    -> Setting
             1    -> Moving
             2    -> Jumping
-            3    -> Removing1
-            4    -> Removing2
+            3    -> Removing
             else -> throw IllegalStateException("Stage must be between 0 and 4 but is $this")
         }
     }
@@ -103,6 +102,8 @@ val Player.num: Int
     }
 
 val Player.isValidPlayer get() = true
+
+val Player.lost get() = stage != Setting && board.stoneAmount < 3
 
 fun Player.playerBinaryPrint(tabAmount: Int = 0): Player {
     val additionalTabs = "\t".repeat(tabAmount)

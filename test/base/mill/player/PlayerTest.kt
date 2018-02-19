@@ -27,7 +27,7 @@ class PlayerTest {
     fun removing1() {
         assertEquals(
                 0b0_011_0000__000_000_000_000_000_000_000_000,
-                player(0, Removing1, 0, 0b000_000_000_000_000_000_000_000)
+                player(0, Removing, 0, 0b000_000_000_000_000_000_000_000)
         )
     }
 
@@ -44,14 +44,6 @@ class PlayerTest {
         assertEquals(
                 0b0_010_0000__000_000_000_000_000_000_000_000,
                 player(0, Jumping, 0, 0b000_000_000_000_000_000_000_000)
-        )
-    }
-
-    @Test
-    fun removing2() {
-        assertEquals(
-                0b1_100_0000__000_000_000_000_000_000_000_000.toInt(),
-                player(1, Removing2, 0, 0b000_000_000_000_000_000_000_000)
         )
     }
 

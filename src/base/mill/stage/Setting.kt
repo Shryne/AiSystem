@@ -9,7 +9,7 @@ object Setting : Stage {
 
     /**
      * Sets the stone from move on the first player of mill and reduces the stonesToSet variable inside
-     * mill by one. This stage can lead to the moving stage, if stonesToSet reaches zero, or to the Removing1/2 Stage,
+     * mill by one. This stage can lead to the moving stage, if stonesToSet reaches zero, or to the Removing/2 Stage,
      * if a mill or doubleMill is created with the given move.
      *
      * @return The resulting game
@@ -54,9 +54,9 @@ object Setting : Stage {
     private helper
     ------------------------------------------------------------------------------------------------------------------*/
     private fun next(playerBoard: Int, stonesToSet: Int, move: Move) =
-            if (playerBoard.isMill(move))
-                if (playerBoard.isDoubleMill(move)) Removing2
-                else Removing1
-            else if (stonesToSet == 0) Moving
-            else this
+            when {
+                playerBoard.isMill(move) -> Removing
+                stonesToSet == 0         -> Moving
+                else                     -> this
+            }
 }

@@ -32,18 +32,10 @@ class StageTest {
     }
 
     @Test
-    fun removing1() {
+    fun removing() {
         assertEquals(
-                Removing1,
-                player(1, Removing1, 1, 0b000_000_000_000_000_000_000_000).stage
-        )
-    }
-
-    @Test
-    fun removing2() {
-        assertEquals(
-                Removing2,
-                player(0, Removing2, 4, 0b000_000_000_000_000_000_000_000).stage
+                Removing,
+                player(1, Removing, 1, 0b000_000_000_000_000_000_000_000).stage
         )
     }
 }

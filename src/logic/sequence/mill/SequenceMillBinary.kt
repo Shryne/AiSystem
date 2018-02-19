@@ -1,6 +1,5 @@
 package logic.sequence.mill
 
-import base.EventualMemoryArray
 import base.mill.*
 import logic.sequence.GameSequence
 import logic.sequence.Player
@@ -8,21 +7,38 @@ import logic.sequence.Player
 private typealias MillAiPlayer = Player<ImmutableMillBinary, Move>
 
 class SequenceMillBinary(private val player: MillAiPlayer, private val otherPlayer: MillAiPlayer) : GameSequence {
-    private var mill: Mill = mill()
-    private val millWrapper: ImmutableMillBinary = ImmutableMillBinary()
+    private val mill = MillWrapper(mill())
+
+
+    private val millView = ImmutableMillBinary(mill)
     private var currentPlayer = player
 
     override fun step(amount: Int) {
-        require(0 < amount)
+        assert(0 < amount)
 
         (0 until amount).forEach {
-            mill = mill.moved(currentPlayer.move(millWrapper))
+            if (mill.isOver) mill.reset()
+            mill.moved(currentPlayer.move(millView))
             currentPlayer = currentPlayer.other
-            if (mill.over) mill = mill()
         }
     }
 
-    //override fun toString() = "Player 1: $player\n$game"
+    // TODO: Add to interface
+    fun game(amount: Int) {
+        assert(0 < amount)
+
+        var games = 0
+        do {
+            if (mill.isOver) mill.reset()
+
+            mill.moved(currentPlayer.move(millView))
+            currentPlayer = currentPlayer.other
+
+            if (mill.isOver) games++
+        } while (games < amount)
+    }
+
+    override fun toString() = mill.toString()
     /*------------------------------------------------------------------------------------------------------------------
     private helper
     ------------------------------------------------------------------------------------------------------------------*/

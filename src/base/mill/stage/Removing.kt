@@ -9,7 +9,7 @@ import utils.rightestBit
  * @param
  * @return
  */
-object Removing1 : Stage {
+object Removing : Stage {
     override val order = 3
 
     /**
@@ -53,7 +53,7 @@ object Removing1 : Stage {
 
     override fun orderedPlayersGame(player: Player, otherPlayer: Player) = mill(player, otherPlayer)
 
-    override fun toString() = "Removing1"
+    override fun toString() = "Removing"
     /*------------------------------------------------------------------------------------------------------------------
     private helper
     ------------------------------------------------------------------------------------------------------------------*/

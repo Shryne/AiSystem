@@ -1,5 +1,5 @@
 package logic.sequence.tic_tac_toe
-
+/*
 import base.tic_tac_toe.TicTacToe
 import logic.sequence.ImmutableGame
 
@@ -15,3 +15,4 @@ class ImmutableTicTacToe(private val game: TicTacToe) : ImmutableGame<Array<Stri
     override val map get() = game.map
 
 }
+        */

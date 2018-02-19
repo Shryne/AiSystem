@@ -2,7 +2,6 @@ package base._2048;
 
 import base.EventualMemoryArray;
 import org.jetbrains.annotations.NotNull;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.Collection;

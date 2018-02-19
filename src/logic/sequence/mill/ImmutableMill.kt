@@ -9,10 +9,9 @@ import logic.sequence.ImmutableGame
  * @param
  * @return
  */
-class ImmutableMillBinary: ImmutableGame<Long, Move> {
-    private val mill: Mill = mill()
+class ImmutableMillBinary(private val mill: MillWrapper): ImmutableGame<Long, Move> {
+    override val possibleMoves get() = mill.possibleMoves
 
-    override val possibleMoves = MoveArray()
-    override val isOver get() = mill.over
-    override val map get() = mill.board
+    override val isOver get() = mill.isOver
+    override val map get() = mill.map
 }

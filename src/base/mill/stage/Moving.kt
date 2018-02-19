@@ -15,7 +15,7 @@ object Moving : Stage {
 
     /**
      * The given move must contain the source and the target stone. The source stone will be removed from the current
-     * players board and the target stone will be added. This stage can transition to Moving and Removing1.
+     * players board and the target stone will be added. This stage can transition to Moving and Removing.
      *
      * -> tested <-
      */
@@ -61,7 +61,7 @@ object Moving : Stage {
     ------------------------------------------------------------------------------------------------------------------*/
     private fun next(playerBoard: Int, targetMove: Move) =
             when {
-                playerBoard.isMill(targetMove) -> Removing1
+                playerBoard.isMill(targetMove) -> Removing
                 else                     -> this
             }
 }

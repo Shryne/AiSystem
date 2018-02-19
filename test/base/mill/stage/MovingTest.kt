@@ -26,10 +26,10 @@ class MovingTest {
     }
 
     @Test
-    fun toRemoving1() {
+    fun toRemoving() {
         assertEquals(
                 mill(
-                        player(0, Removing1, 0, 0b000_000_000_010_110_010_010_010),
+                        player(0, Removing, 0, 0b000_000_000_010_110_010_010_010),
                         player(1, Moving, 0, 0b000_000_010_100_001_100_000_100)
                 ),
                 Moving.moved(

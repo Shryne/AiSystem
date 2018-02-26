@@ -42,6 +42,7 @@ object Removing : Stage {
     override fun moves(mill: Mill, to: EventualMemoryArray<Move>): EventualMemoryArray<Move> {
         var otherBoard = mill.otherPlayer.board
         var i = 0
+        to.clear()
         while (otherBoard != 0) {
             val move = otherBoard.rightestBit
             to[i] = move

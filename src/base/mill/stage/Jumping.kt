@@ -38,6 +38,7 @@ object Jumping: Stage {
             val source = board.rightestBit
             var tempFullBoardFree = fullBoardFree
 
+            to.clear()
             while (tempFullBoardFree != 0) {
                 val target = tempFullBoardFree.rightestBit
                 to[i] = source or target

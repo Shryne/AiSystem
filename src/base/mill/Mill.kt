@@ -26,6 +26,11 @@ fun Mill.moves(to: MoveArray) {
     player.stage.moves(this, to)
 }
 
+/**
+ * A game is over, if a player has less than three stones outside of the setting phase. This method doesn't account the
+ * case when a player doesn't have any moves left! For performance reasons, it has to be checked outside when using
+ * the [moves] method.
+ */
 val Mill.over: Boolean get() = player.lost || otherPlayer.lost
 
 val Mill.board: Long
@@ -98,11 +103,11 @@ val Mill.asString: String
                         "┃ %s ┣━━━━━━━━━━━━━┫ %s ┣━━━━━━━━━━━━━┫ %s ┃\n" +
                         "┗━━━┛             ┗━━━┛             ┗━━━┛\n",
                 *map(IntArray(MILL_FIELDS)).map {
-                        when(it) {
-                            0 -> ANSI_RED + "0" + ANSI_RESET
-                            1 -> ANSI_RED + "1" + ANSI_RESET
-                            else -> " "
-                        }
+                    when (it) {
+                        0    -> ANSI_RED + "0" + ANSI_RESET
+                        1    -> ANSI_RED + "1" + ANSI_RESET
+                        else -> " "
+                    }
                 }.toTypedArray()
         ) +
                 when {
@@ -120,6 +125,11 @@ fun Mill.millBinaryPrint(tabAmount: Int = 0): Mill {
 
     println("${additionalTabs}Mill:")
     player.playerBinaryPrint(tabAmount + 1)
+    println(
+            MoveArray().apply {
+                moves(this)
+            }.asString(tabAmount + 2) // +2, because it is part of the player (who is already at +1)
+    )
     println()
     otherPlayer.playerBinaryPrint(tabAmount + 1)
     return this

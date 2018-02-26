@@ -8,37 +8,37 @@ weaknesses:
 - The mills are defined by hand, not by formula -> error prone
  */
 
-/**
- * Methods for the board of the mill game. This board is part of the player and doesn't contain the full representation
- * of a games board.
- *
- * The board is inside the first 24 bits of an int and the indices are from right to left.
- * Board as an int: 0b000_000_000_000_000_000_000_000
- * Binary indices: 23'22'21_20'19'28_17'16'15_14'13'12_11'10'9_8'7'6_5'4'3_3'2'1
- * Indices in "reality":
- *
- * ┏━━━┓             ┏━━━┓             ┏━━━┓
- * ┃ 0 ┣━━━━━━━━━━━━━┫ 1 ┣━━━━━━━━━━━━━┫ 2 ┃
- * ┗━┳━┛             ┗━┳━┛             ┗━┳━┛
- *   ┃   ┏━━━┓       ┏━┻━┓       ┏━━━┓   ┃
- *   ┃   ┃ 3 ┣━━━━━━━┫ 4 ┣━━━━━━━┫ 5 ┃   ┃
- *   ┃   ┗━┳━┛       ┗━┳━┛       ┗━┳━┛   ┃
- *   ┃     ┃   ┏━━━┓ ┏━┻━┓ ┏━━━┓   ┃     ┃
- *   ┃     ┃   ┃ 6 ┣━┫ 7 ┣━┫ 8 ┃   ┃     ┃
- *   ┃     ┃   ┗━┳━┛ ┗━━━┛ ┗━┳━┛   ┃     ┃
- * ┏━┻━┓ ┏━┻━┓ ┏━┻━┓       ┏━┻━┓ ┏━┻━┓ ┏━┻━┓
- * ┃ 9 ┣━┫ 10┣━┫ 11┃       ┃ 12┣━┫ 13┣━┫ 14┃
- * ┗━┳━┛ ┗━┳━┛ ┗━┳━┛       ┗━┳━┛ ┗━┳━┛ ┗━┳━┛
- *   ┃     ┃   ┏━┻━┓ ┏━━━┓ ┏━┻━┓   ┃     ┃
- *   ┃     ┃   ┃ 15┣━┫ 16┣━┫ 17┃   ┃     ┃
- *   ┃     ┃   ┗━━━┛ ┗━┳━┛ ┗━━━┛   ┃     ┃
- *   ┃   ┏━┻━┓       ┏━┻━┓       ┏━┻━┓   ┃
- *   ┃   ┃ 18┣━━━━━━━┫ 19┣━━━━━━━┫ 20┃   ┃
- *   ┃   ┗━━━┛       ┗━┳━┛       ┗━━━┛   ┃
- * ┏━┻━┓             ┏━┻━┓             ┏━┻━┓
- * ┃ 21┣━━━━━━━━━━━━━┫ 22┣━━━━━━━━━━━━━┫ 23┃
- * ┗━━━┛             ┗━━━┛             ┗━━━┛
- */
+        /**
+         * Methods for the board of the mill game. This board is part of the player and doesn't contain the full representation
+         * of a games board.
+         *
+         * The board is inside the first 24 bits of an int and the indices are from right to left.
+         * Board as an int: 0b000_000_000_000_000_000_000_000
+         * Binary indices: 23'22'21_20'19'28_17'16'15_14'13'12_11'10'9_8'7'6_5'4'3_3'2'1
+         * Indices in "reality":
+         *
+         * ┏━━━┓             ┏━━━┓             ┏━━━┓
+         * ┃ 0 ┣━━━━━━━━━━━━━┫ 1 ┣━━━━━━━━━━━━━┫ 2 ┃
+         * ┗━┳━┛             ┗━┳━┛             ┗━┳━┛
+         *   ┃   ┏━━━┓       ┏━┻━┓       ┏━━━┓   ┃
+         *   ┃   ┃ 3 ┣━━━━━━━┫ 4 ┣━━━━━━━┫ 5 ┃   ┃
+         *   ┃   ┗━┳━┛       ┗━┳━┛       ┗━┳━┛   ┃
+         *   ┃     ┃   ┏━━━┓ ┏━┻━┓ ┏━━━┓   ┃     ┃
+         *   ┃     ┃   ┃ 6 ┣━┫ 7 ┣━┫ 8 ┃   ┃     ┃
+         *   ┃     ┃   ┗━┳━┛ ┗━━━┛ ┗━┳━┛   ┃     ┃
+         * ┏━┻━┓ ┏━┻━┓ ┏━┻━┓       ┏━┻━┓ ┏━┻━┓ ┏━┻━┓
+         * ┃ 9 ┣━┫ 10┣━┫ 11┃       ┃ 12┣━┫ 13┣━┫ 14┃
+         * ┗━┳━┛ ┗━┳━┛ ┗━┳━┛       ┗━┳━┛ ┗━┳━┛ ┗━┳━┛
+         *   ┃     ┃   ┏━┻━┓ ┏━━━┓ ┏━┻━┓   ┃     ┃
+         *   ┃     ┃   ┃ 15┣━┫ 16┣━┫ 17┃   ┃     ┃
+         *   ┃     ┃   ┗━━━┛ ┗━┳━┛ ┗━━━┛   ┃     ┃
+         *   ┃   ┏━┻━┓       ┏━┻━┓       ┏━┻━┓   ┃
+         *   ┃   ┃ 18┣━━━━━━━┫ 19┣━━━━━━━┫ 20┃   ┃
+         *   ┃   ┗━━━┛       ┗━┳━┛       ┗━━━┛   ┃
+         * ┏━┻━┓             ┏━┻━┓             ┏━┻━┓
+         * ┃ 21┣━━━━━━━━━━━━━┫ 22┣━━━━━━━━━━━━━┫ 23┃
+         * ┗━━━┛             ┗━━━┛             ┗━━━┛
+         */
 typealias Board = Int
 
 private const val MILL_H0 = 0b000_000_000_000_000_000_000_111
@@ -61,92 +61,44 @@ private const val MILL_V7 = (1 shl 2) or (1 shl 14) or (1 shl 23)
 
 private val mills = hashMapOf(
         // row: 0
-        move(0).to(
-                arrayOf(MILL_H0, MILL_V0)
-        ),
-        move(1).to(
-                arrayOf(MILL_H0, MILL_V3)
-        ),
-        move(2).to(
-                arrayOf(MILL_H0, MILL_V7)
-        ),
+        move(0) to arrayOf(MILL_H0, MILL_V0),
+        move(1) to arrayOf(MILL_H0, MILL_V3),
+        move(2) to arrayOf(MILL_H0, MILL_V7),
 
         // row: 1
-        move(3).to(
-                arrayOf(MILL_H1, MILL_V1)
-        ),
-        move(4).to(
-                arrayOf(MILL_H1, MILL_V3)
-        ),
-        move(5).to(
-                arrayOf(MILL_H1, MILL_V6)
-        ),
+        move(3) to arrayOf(MILL_H1, MILL_V1),
+        move(4) to arrayOf(MILL_H1, MILL_V3),
+        move(5) to arrayOf(MILL_H1, MILL_V6),
 
         // row: 2
-        move(6).to(
-                arrayOf(MILL_H2, MILL_V2)
-        ),
-        move(7).to(
-                arrayOf(MILL_H2, MILL_V3)
-        ),
-        move(8).to(
-                arrayOf(MILL_H2, MILL_V5)
-        ),
+        move(6) to arrayOf(MILL_H2, MILL_V2),
+        move(7) to arrayOf(MILL_H2, MILL_V3),
+        move(8) to arrayOf(MILL_H2, MILL_V5),
 
         // row: 3
-        move(9).to(
-                arrayOf(MILL_H3, MILL_V0)
-        ),
-        move(10).to(
-                arrayOf(MILL_H3, MILL_V1)
-        ),
-        move(11).to(
-                arrayOf(MILL_H3, MILL_V2)
-        ),
+        move(9) to arrayOf(MILL_H3, MILL_V0),
+        move(10) to arrayOf(MILL_H3, MILL_V1),
+        move(11) to arrayOf(MILL_H3, MILL_V2),
 
         // row: 4
-        move(12).to(
-                arrayOf(MILL_H4, MILL_V5)
-        ),
-        move(13).to(
-                arrayOf(MILL_H4, MILL_V6)
-        ),
-        move(14).to(
-                arrayOf(MILL_H4, MILL_V7)
-        ),
+        move(12) to arrayOf(MILL_H4, MILL_V5),
+        move(13) to arrayOf(MILL_H4, MILL_V6),
+        move(14) to arrayOf(MILL_H4, MILL_V7),
 
         // row: 5
-        move(15).to(
-                arrayOf(MILL_H5, MILL_V2)
-        ),
-        move(16).to(
-                arrayOf(MILL_H5, MILL_V4)
-        ),
-        move(17).to(
-                arrayOf(MILL_H5, MILL_V5)
-        ),
+        move(15) to arrayOf(MILL_H5, MILL_V2),
+        move(16) to arrayOf(MILL_H5, MILL_V4),
+        move(17) to arrayOf(MILL_H5, MILL_V5),
 
         // row: 6
-        move(18).to(
-                arrayOf(MILL_H6, MILL_V1)
-        ),
-        move(19).to(
-                arrayOf(MILL_H6, MILL_V4)
-        ),
-        move(20).to(
-                arrayOf(MILL_H6, MILL_V6)
-        ),
+        move(18) to arrayOf(MILL_H6, MILL_V1),
+        move(19) to arrayOf(MILL_H6, MILL_V4),
+        move(20) to arrayOf(MILL_H6, MILL_V6),
 
         // row: 7
-        move(21).to(
-                arrayOf(MILL_H7, MILL_V0)
-        ),
-        move(22).to(
-                arrayOf(MILL_H7, MILL_V4)
-        ),
-        move(23).to(
-                arrayOf(MILL_H7, MILL_V7)
-        )
+        move(21) to arrayOf(MILL_H7, MILL_V0),
+        move(22) to arrayOf(MILL_H7, MILL_V4),
+        move(23) to arrayOf(MILL_H7, MILL_V7)
 )
 
 private const val DOUBLE_MILL_0 = MILL_H0 or MILL_V0
@@ -175,37 +127,37 @@ private const val DOUBLE_MILL_22 = MILL_H7 or MILL_V4
 private const val DOUBLE_MILL_23 = MILL_H7 or MILL_V7
 
 private val doubleMills = hashMapOf(
-        move(0).to(DOUBLE_MILL_0),
-        move(1).to(DOUBLE_MILL_1),
-        move(2).to(DOUBLE_MILL_2),
+        move(0) to DOUBLE_MILL_0,
+        move(1) to DOUBLE_MILL_1,
+        move(2) to DOUBLE_MILL_2,
 
-        move(3).to(DOUBLE_MILL_3),
-        move(4).to(DOUBLE_MILL_4),
-        move(5).to(DOUBLE_MILL_5),
+        move(3) to DOUBLE_MILL_3,
+        move(4) to DOUBLE_MILL_4,
+        move(5) to DOUBLE_MILL_5,
 
-        move(6).to(DOUBLE_MILL_6),
-        move(7).to(DOUBLE_MILL_7),
-        move(8).to(DOUBLE_MILL_8),
+        move(6) to DOUBLE_MILL_6,
+        move(7) to DOUBLE_MILL_7,
+        move(8) to DOUBLE_MILL_8,
 
-        move(9).to(DOUBLE_MILL_9),
-        move(10).to(DOUBLE_MILL_10),
-        move(11).to(DOUBLE_MILL_11),
+        move(9) to DOUBLE_MILL_9,
+        move(10) to DOUBLE_MILL_10,
+        move(11) to DOUBLE_MILL_11,
 
-        move(12).to(DOUBLE_MILL_12),
-        move(13).to(DOUBLE_MILL_13),
-        move(14).to(DOUBLE_MILL_14),
+        move(12) to DOUBLE_MILL_12,
+        move(13) to DOUBLE_MILL_13,
+        move(14) to DOUBLE_MILL_14,
 
-        move(15).to(DOUBLE_MILL_15),
-        move(16).to(DOUBLE_MILL_16),
-        move(17).to(DOUBLE_MILL_17),
+        move(15) to DOUBLE_MILL_15,
+        move(16) to DOUBLE_MILL_16,
+        move(17) to DOUBLE_MILL_17,
 
-        move(18).to(DOUBLE_MILL_18),
-        move(19).to(DOUBLE_MILL_19),
-        move(20).to(DOUBLE_MILL_20),
+        move(18) to DOUBLE_MILL_18,
+        move(19) to DOUBLE_MILL_19,
+        move(20) to DOUBLE_MILL_20,
 
-        move(21).to(DOUBLE_MILL_21),
-        move(22).to(DOUBLE_MILL_22),
-        move(23).to(DOUBLE_MILL_23)
+        move(21) to DOUBLE_MILL_21,
+        move(22) to DOUBLE_MILL_22,
+        move(23) to DOUBLE_MILL_23
 )
 
 /**
@@ -253,13 +205,17 @@ val Board.stoneAmount: Int
 // TODO
 val Board.isValidBoard get() = true
 
-fun Board.boardBinaryPrint(): Board {
-    var result = ""
-    val binary = Integer.toBinaryString(this).fill("0", MILL_FIELDS)
-    binary.forEachIndexed {
-        index, c ->
-        result += if (index.rem(3) == 0) "_$c" else c
+val Board.boardBinaryString: String
+    get() {
+        var result = ""
+        val binary = Integer.toBinaryString(this).fill("0", MILL_FIELDS)
+        binary.forEachIndexed { index, c ->
+            result += if (index.rem(3) == 0) "_$c" else c
+        }
+        return result.substring(1 until result.length)
     }
-    println("Board: " + result.substring(1 until result.length))
+
+fun Board.boardBinaryPrint(): Board {
+    println("Board: " + boardBinaryString)
     return this
 }

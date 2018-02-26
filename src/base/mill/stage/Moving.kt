@@ -36,6 +36,7 @@ object Moving : Stage {
         val fullBoard = mill.player.board or mill.otherPlayer.board
         var board = mill.player.board
         var i = 0
+        to.clear()
         while (board != 0) {
             val source = board.rightestBit
 

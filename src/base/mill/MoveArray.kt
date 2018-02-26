@@ -27,7 +27,9 @@ class MoveArray(elems: IntArray = IntArray(0)) : EventualMemoryArray<Move> {
         }
     }
 
+    override val empty get() = size == 0
     override var size: Int = 0
+        private set
 
     override fun set(index: Int, elem: Int) {
         assert((0 <= index) and (index < MAX_MOVE_AMOUNT)) {
@@ -42,8 +44,26 @@ class MoveArray(elems: IntArray = IntArray(0)) : EventualMemoryArray<Move> {
         return container[index]
     }
 
-    // TODO: Better string representation
-    override fun toString() = "MoveArray: ${Arrays.toString(container)}"
+    override fun clear() {
+        size = 0
+    }
+
+    override fun iterator(): Iterator<Move> =
+            object : Iterator<Move> {
+                private var cursor = -1
+
+                override fun hasNext() = (cursor + 1) < size
+
+                override fun next(): Move {
+                    cursor++
+                    return container[cursor]
+                }
+            }
+
+    fun asString(tabAmount: Int = 0) =
+            container.take(size).joinToString("\n", "${"\t".repeat(tabAmount)}Moves:\n") {
+                "${"\t".repeat(tabAmount + 1)} ${it.boardBinaryString}"
+            }
 
     override fun equals(other: Any?) =
             if (other is MoveArray) { // TODO: Not nice to use the implementation class

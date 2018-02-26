@@ -6,12 +6,17 @@ import logic.sequence.Player
 
 private typealias MillAiPlayer = Player<ImmutableMillBinary, Move>
 
-class SequenceMillBinary(private val player: MillAiPlayer, private val otherPlayer: MillAiPlayer) : GameSequence {
-    private val mill = MillWrapper(mill())
-
+class SequenceMillBinary(
+        private val mill: MillWrapper,
+        private val player: MillAiPlayer,
+        private val otherPlayer: MillAiPlayer
+) : GameSequence {
 
     private val millView = ImmutableMillBinary(mill)
     private var currentPlayer = player
+
+    val moves get() = mill.possibleMoves
+    val internalMill get() = mill.mill
 
     override fun step(amount: Int) {
         assert(0 < amount)

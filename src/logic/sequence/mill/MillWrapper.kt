@@ -1,6 +1,8 @@
 package logic.sequence.mill
 
-import base.mill.*
+import base.mill.Mill
+import base.mill.Move
+import base.mill.MoveArray
 
 /**
  * - mutable
@@ -8,38 +10,19 @@ import base.mill.*
  * @param
  * @return
  */
-class MillWrapper(mill: Mill) {
+interface MillWrapper {
     companion object {
-        private const val MAX_TURN_AMOUNT = 500
+        /**
+         * A game that takes this amount of moves is considered to be tied.
+         */
+        const val MAX_TURN_AMOUNT = 50
     }
+    val mill: Mill
+    val possibleMoves: MoveArray
 
-    private var turns = 0
+    val isOver: Boolean
+    val map: Long
 
-    var mill = mill
-        private set
-
-    private val moveArray = MoveArray()
-    val possibleMoves
-        get() = moveArray.apply {
-            mill.moves(moveArray)
-        }
-
-    val isOver get() = mill.over || turns >= MAX_TURN_AMOUNT
-    val map get() = mill.board
-
-    fun moved(move: Move) {
-        require(!mill.over)
-        mill = mill.moved(move)
-        turns++
-    }
-
-    fun reset() {
-        mill = mill()
-        turns = 0
-    }
-
-    override fun toString() =
-            "Current player: ${mill.player.num}\n${mill.asString}" +
-                    (if (turns >= MAX_TURN_AMOUNT) "tied" else "") +
-                    "\nturns: $turns"
+    fun moved(move: Move)
+    fun reset()
 }
